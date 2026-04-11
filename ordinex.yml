@@ -2,10 +2,7 @@ version: '3.8'
 
 services:
   ordinex:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: ordinex:latest
+    image: ghcr.io/lansepyy/ordinex:latest
     container_name: ordinex
     
     # 卷配置
@@ -33,13 +30,13 @@ services:
       # 这里只保留不适合放在 Web UI 中维护的启动级参数
 
       # 是否启用 Web 登录鉴权
-      - WEB_AUTH_ENABLED=${WEB_AUTH_ENABLED:-true}
+      - WEB_AUTH_ENABLED=true
 
       # 忘记密码时用于强制重置账号密码的管理员口令
-      - ADMIN_KEY=${ADMIN_KEY:-}
+      - ADMIN_KEY=
 
       # Flask Session 签名密钥；生产环境建议设置为固定长随机字符串
-      - WEB_SECRET_KEY=${WEB_SECRET_KEY:-}
+      - WEB_SECRET_KEY=
       
       # Flask 运行环境，容器默认使用生产模式
       - FLASK_ENV=production
