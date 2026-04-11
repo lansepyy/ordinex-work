@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  ordinex:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ordinex:latest
+    container_name: ordinex
+    
+    # 卷配置
+    volumes:
+      # 源文件夹（包含待整理的视频文件）
+      - ./input:/input
+      
+      # 目标文件夹（整理后的文件）
+      - ./output:/output
+      
+      # 配置文件夹
+      - ./config:/config
+      
+      # 日志文件夹
+      - ./logs:/logs
+    
+    # 端口映射
+    ports:
+      # Web 管理界面端口
+      - "5000:5000"
+    
+    # 环境变量
+    environment:
+      # 大部分业务配置建议在 Web UI 中设置，并自动保存到 ./config/config.json
+      # 这里只保留不适合放在 Web UI 中维护的启动级参数
+
+      # 是否启用 Web 登录鉴权
+      - WEB_AUTH_ENABLED=${WEB_AUTH_ENABLED:-true}
+
+      # 忘记密码时用于强制重置账号密码的管理员口令
+      - ADMIN_KEY=${ADMIN_KEY:-}
+
+      # Flask Session 签名密钥；生产环境建议设置为固定长随机字符串
+      - WEB_SECRET_KEY=${WEB_SECRET_KEY:-}
+      
+      # Flask 运行环境，容器默认使用生产模式
+      - FLASK_ENV=production
+
+      # Flask 调试开关，生产环境保持 0
+      - FLASK_DEBUG=0
+    
+    # 资源限制（可根据需要调整）
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+    
+    # 重启策略
+    restart: unless-stopped
+    
+    # 保持容器运行以便手动执行
+    stdin_open: true
+    tty: true
