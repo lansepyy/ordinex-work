@@ -9,6 +9,12 @@
 
 ## 版本更新日志
 
+### v2.3.2 (2026-04-13)
+- **修复**：云模式整理后报错 `'NoneType' object is not iterable`——Alist/Openlist 空目录返回 `content: null`，`list_files` 现已正确返回空列表
+- **修复**：云模式 move/删除后残留的空目录现在会自动清理
+- **修复**：云模式加入文件夹名交叉验证，识别逻辑与本地模式对齐，有效减少不必要的 AI 识别调用
+
+
 ### v2.3.1 (2026-04-13)
 - **修复**：云存储模式整理报错 `NamingFormatter is not defined`，现已在 `_cloud_format_dest` 内正确导入
 - **修复**：DV（杜比视界）、HDR 等画面效果标识现在会保留到 `videoFormat` 变量中（本地模式和云模式均修复）
