@@ -11,6 +11,19 @@
 
 ## 版本更新日志
 
+### v2.4.0 (2026-04-19)
+- **重构**：AI 识别引擎全面重构，新增 `src/recognition/` 模块（engine, cache, batch_cluster, confidence_calibrator, cost_tracker, db, feedback_learner, policy, prompting, tmdb_validator, models, providers）
+- **新增**：`RecognitionEngine` 统一引擎，支持单文件 `recognize()` 和批量 `recognize_batch()` 两条互不干扰的识别路径
+- **新增**：`BatchClusterer` 聚类批量识别——同系列文件只识别锚点，结果自动传播到其余文件，大幅节省 API 调用
+- **新增**：用户确认缓存机制——`auto_cache=False` 默认不自动缓存，用户在结果表手动确认后才写入缓存，避免错误结果污染缓存
+- **新增**：缓存读取置信度门槛过滤——`cache.get(key, min_confidence=threshold)` 低于阈值的缓存结果当作未命中，重新识别
+- **新增**：`/api/files/batch-preview-rename` 批量识别 API（支持聚类优化）
+- **新增**：`/api/recognition/cache/save` 手动缓存 API（用户确认后调用）
+- **新增**：前端结果表——显示 旧名称→新名称，支持重新识别、手动修改、逐条/全部写入缓存，仅已缓存项可批量重命名
+- **新增**：用户反馈修正后自动更新缓存，保证下次识别获取正确结果
+- **新增**：SQLite 统一数据库后端（`ordinex.db`），缓存/费用/反馈共享，自动从旧 JSON 迁移
+- **优化**：基础识别逻辑完全不变，只增强 AI 模块，新旧流程并行
+
 ### v2.3.5 (2026-04-14)
 - **修复**：剧集文件季号为空（`season=None`）时，命名模板中 `Season {{season}}` 渲染为 `"Season"`（无数字）的问题；现均自动补为第 1 季，四个格式化路径（本地整理、云端整理、文件管理预览、识别测试）全部修复
 
@@ -683,5 +696,5 @@ MIT License
 
 ---
 
-**最后更新**: 2026-04-12
-**项目版本**: 2.2.1
+**最后更新**: 2026-04-19
+**项目版本**: 2.4.0
