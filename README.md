@@ -11,6 +11,15 @@
 
 ## 版本更新日志
 
+### v2.5.0 (2026-04-20)
+- **修复**：文件管理识别确认后生成错误文件夹的问题——原逻辑复用任务的完整输出模板（含 `Category/Title/Season/...` 多层路径），导致文件夹名取到 category 段（如"电影"）而非剧名；现新增 `_fm_flat_rename()` 专用扁平命名函数，文件管理独立于任务命名模板，直接生成 `Title (Year)` 格式
+- **新增**：「结果展示」侧边栏——汇总所有任务的执行结果（原文件名→新名称映射），支持按任务筛选，可点击跳转到对应任务详情
+- **新增**：任务卡片绿色「结果」按钮——点击弹出 Modal 查看该任务每个文件的识别结果、新名称、置信度、执行状态
+- **新增**：Web UI「数据存储」设置面板——识别缓存、成本追踪开关及预算/告警阈值配置，无需手动编辑 config.json
+- **优化**：`recognition_cache` 和 `cost_tracking` 默认从 `"false"` 改为 `"true"`，容器首次运行即启用数据库功能
+- **优化**：文件管理结果表字体增大（表头 0.95rem / 单元格 0.92rm），提升可读性
+
+
 ### v2.4.0 (2026-04-19)
 - **重构**：AI 识别引擎全面重构，新增 `src/recognition/` 模块（engine, cache, batch_cluster, confidence_calibrator, cost_tracker, db, feedback_learner, policy, prompting, tmdb_validator, models, providers）
 - **新增**：`RecognitionEngine` 统一引擎，支持单文件 `recognize()` 和批量 `recognize_batch()` 两条互不干扰的识别路径
