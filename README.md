@@ -156,16 +156,7 @@
 2. 创建新的APIKEY
 3. 记录你的密钥
 
-### 2. 初始化项目
 
-```bash
-# 复制项目
-cp -r video-organizer ~/video-organizer
-cd ~/video-organizer
-
-# 运行初始化脚本
-bash scripts/setup.sh
-```
 
 ### 3. 配置应用
 
@@ -227,15 +218,6 @@ OPENAI_API_KEY=your_api_key_here
 OPENAI_MODEL=gpt-4o-mini
 ```
 
-### 4. 构建和运行
-
-```bash
-# 构建Docker镜像
-bash scripts/build.sh
-
-# 运行整理
-bash scripts/run.sh
-```
 
 ## 命名规则
 
@@ -270,35 +252,7 @@ The Matrix (1999)/The Matrix (1999) - H.264 [tmdbid=603].mkv
 Breaking Bad (2008)/Breaking Bad (2008)-S01-E01 - H.264 [tmdbid=1396].mkv
 ```
 
-## 文件结构
 
-```
-video-organizer/
-├── src/                          # Python源代码
-│   ├── main.py                  # 主程序入口
-│   ├── config_loader.py         # 配置加载器
-│   ├── tmdb_handler.py          # TMDB API处理
-│   ├── ai_recognizer.py         # AI识别器
-│   ├── file_organizer.py        # 文件组织逻辑
-│   └── utils.py                 # 工具函数
-├── config/
-│   └── config.json              # 默认配置文件
-├── scripts/
-│   ├── setup.sh                 # 初始化脚本
-│   ├── build.sh                 # 构建脚本
-│   ├── run.sh                   # 运行脚本
-│   └── remove.sh                # 清理脚本
-├── input/                        # 输入文件夹（挂载）
-├── output/                       # 输出文件夹（挂载）
-├── logs/                         # 日志文件夹（挂载）
-├── Dockerfile                    # 生产环境Dockerfile
-├── Dockerfile.dev               # 开发环境Dockerfile
-├── docker-compose.yml           # Docker编排文件
-├── requirements.txt             # Python依赖
-├── .env.example                 # 环境变量示例
-├── .gitignore                   # Git忽略文件
-└── README.md                    # 本文件
-```
 
 ## Docker Compose 配置详解
 
@@ -538,20 +492,10 @@ chmod 755 ./input
 chmod 755 ./output
 ```
 
-### 4. "Docker构建失败"
 
 ```
-错误信息: failed to build image
-```
 
-✅ 解决方案：
-```bash
-# 清理旧容器
-docker system prune -a
 
-# 重新构建
-bash scripts/build.sh
-```
 
 ### 5. "识别失败率高"
 
@@ -578,16 +522,6 @@ bash scripts/build.sh
   python debug_api.py http://your-server:5000
   ```
 
-- **方案B: 按照调试指南排查**
-  详见 [DEBUG_WEB_UI.md](DEBUG_WEB_UI.md)
-  
-- **方案C: 快速步骤**
-  1. 打开浏览器的开发者工具（F12）
-  2. 进入 Console 标签页
-  3. 查看是否有红色错误信息
-  4. 如果看到 "Loading config..." 日志，说明 JavaScript 正在运行
-  5. 检查 Network 标签中的 `/api/config` 请求是否返回 200 状态码
-  6. 如果返回 200，说明 API 正常，问题在前端；否则检查服务器日志
 
 ## 高级使用
 
@@ -627,30 +561,6 @@ bash scripts/build.sh
 STRM_ENABLED=false
 ```
 
-## 开发指南
-
-### 使用开发环境
-
-```bash
-# 使用开发Dockerfile
-docker-compose -f docker-compose.yml build --build-arg DOCKERFILE=Dockerfile.dev
-
-# 进入容器进行开发
-docker-compose exec video-organizer /bin/bash
-```
-
-### 运行测试
-
-```bash
-docker-compose exec video-organizer pytest
-```
-
-### 代码格式化
-
-```bash
-docker-compose exec video-organizer black src/
-docker-compose exec video-organizer flake8 src/
-```
 
 ## 性能优化
 
@@ -688,25 +598,7 @@ A: 默认behavior是移动文件。如果需要备份，在docker-compose.yml中
 **Q: 支持云存储整合吗？**
 A: 目前仅支持本地文件系统。可以通过挂载网络存储来实现。
 
-## 更新和维护
 
-### 更新项目
-
-```bash
-git pull origin main
-bash scripts/build.sh
-```
-
-### 清理和重置
-
-```bash
-# 移除所有容器和镜像
-bash scripts/remove.sh
-
-# 完全重置项目
-rm -rf input/ output/ logs/
-bash scripts/setup.sh
-```
 
 ## 贡献指南
 
